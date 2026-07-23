@@ -1,11 +1,13 @@
 class Product:
+    """Represents a product in the store."""
+
     def __init__(
         self,
         name: str,
         price: float,
         quantity: int
     ):
-        if not name:
+        if not isinstance(name, str) or not name.strip():
             raise ValueError("Product name cannot be empty.")
 
         if price < 0:
@@ -20,9 +22,11 @@ class Product:
         self.active = True
 
     def get_quantity(self) -> int:
+        """Returns the current product quantity."""
         return self.quantity
 
     def set_quantity(self, quantity: int):
+        """Updates the product quantity."""
         if quantity < 0:
             raise ValueError("Product quantity cannot be negative.")
 
@@ -32,15 +36,19 @@ class Product:
             self.deactivate()
 
     def is_active(self) -> bool:
+        """Returns whether the product is active."""
         return self.active
 
     def activate(self):
+        """Activates the product."""
         self.active = True
 
     def deactivate(self):
+        """Deactivates the product."""
         self.active = False
 
     def show(self):
+        """Prints the product information."""
         print(
             f"{self.name}, "
             f"Price: {self.price}, "
@@ -48,36 +56,18 @@ class Product:
         )
 
     def buy(self, quantity: int) -> float:
+        """Buys a certain quantity and returns the total price."""
         if quantity <= 0:
-            raise ValueError("Purchase quantity must be greater than zero.")
+            raise ValueError(
+                "Purchase quantity must be greater than zero."
+            )
 
         if quantity > self.quantity:
             raise ValueError("Not enough items in stock.")
 
         total_price = self.price * quantity
-        self.set_quantity(self.quantity - quantity)
+        new_quantity = self.quantity - quantity
+
+        self.set_quantity(new_quantity)
 
         return total_price
-
-if __name__ == "__main__":
-    bose = Product(
-        "Bose QuietComfort Earbuds",
-        price=250,
-        quantity=500
-    )
-
-    mac = Product(
-        "MacBook Air M2",
-        price=1450,
-        quantity=100
-    )
-
-    print(bose.buy(50))
-    print(mac.buy(100))
-    print(mac.is_active())
-
-    bose.show()
-    mac.show()
-
-    bose.set_quantity(1000)
-    bose.show()
